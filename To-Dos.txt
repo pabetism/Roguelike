@@ -1,0 +1,32 @@
+DONE change player char based on the direction they're going
+
+give npc's an ai that won't attack you until you attack them
+
+implement a command 
+	"a" for attack which attacks the moster in your 8 adjacent tiles with the lowest hp
+
+implement command 
+	"s" for say(?) that initiates a conversation (you say 'ho', they don't respond) with a random npc in your 8 adjacent tiles
+
+add to the npc's ai
+	--they say 'hey' after you talk to them
+
+add to the npc's ai
+	--they ask yow 'how are you' and a menu pops up with options
+	--after option select, menu disapears and they say 'ok'
+
+add to the npc's ai
+	--instead of just saying 'ok' after you respond to their question, they respond 'ok' for one option and 'hmm' for another
+
+add to the npc's ai
+	--the particular npc entity which you spoke to now remembers what you said
+
+add to the npc's ai
+	--the particular npc enitty which you spoke to now remembers what you said, and responds differently next time you say hey, depending on your previous responce
+
+add a 'bond' or 'relationship' to each npc that goes up or down based on the above conversation
+
+when near that npc, a bar indicating the bond level is shown in the panel, with the npc's name
+
+
+

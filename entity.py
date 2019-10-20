@@ -12,7 +12,7 @@ class Entity:
     A generic object to represent players, enemies, items, etc.
     """
     def __init__(self, x, y, char, color, name, blocks=False, render_order=RenderOrder.CORPSE, fighter=None, ai=None,
-                 item=None, inventory=None, stairs=None, level=None, equipment=None, equippable=None):
+                 item=None, inventory=None, stairs=None, level=None, equipment=None, equippable=None, facing='Down'):
         self.x = x
         self.y = y
         self.char = char
@@ -28,6 +28,7 @@ class Entity:
         self.level = level
         self.equipment = equipment
         self.equippable = equippable
+        self.facing = facing
 
         if self.fighter:
             self.fighter.owner = self
@@ -77,6 +78,12 @@ class Entity:
 
     def distance(self, x, y):
         return math.sqrt((x - self.x) ** 2 + (y - self.y) ** 2)
+
+    def set_char(self, new_char):
+        self.char = new_char
+
+    def set_facing(self, new_dir):
+        self.facing = new_dir
 
     def distance_to(self, other):
         dx = other.x - self.x

@@ -67,6 +67,22 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
             destination_x = player.x + dx
             destination_y = player.y + dy
 
+            if dx > 0:
+                player.set_char('>')
+                player.set_facing('Left')
+
+            elif dx < 0:
+                player.set_char('<')
+                player.set_facing('Right')
+
+            elif dy > 0:
+                player.set_char('v')
+                player.set_facing('Down')
+
+            elif dy < 0:
+                player.set_char('^')
+                player.set_facing('Up')
+
             if not game_map.is_blocked(destination_x, destination_y):
                 target = get_blocking_entities_at_location(entities, destination_x, destination_y)
 
