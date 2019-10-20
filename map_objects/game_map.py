@@ -1,10 +1,11 @@
 import libtcodpy as libtcod
 from random import randint
 
-from components.ai import BasicMonster
+from components.ai import BasicMonster, BasicNPC
 from components.equipment import EquipmentSlots
 from components.equippable import Equippable
 from components.fighter import Fighter
+from components.social import Social
 from components.item import Item
 from components.stairs import Stairs
 
@@ -120,7 +121,7 @@ class GameMap:
 
     def place_entities(self, room, entities):
         max_npcs_per_room = from_dungeon_level([[6, 1], [2, 4]], self.dungeon_level)
-        max_monsters_per_room = from_dungeon_level([[2, 1], [3, 4], [5, 6]], self.dungeon_level)
+        max_monsters_per_room = from_dungeon_level([[0, 1], [3, 4], [5, 6]], self.dungeon_level)
         max_items_per_room = from_dungeon_level([[1, 1], [2, 4]], self.dungeon_level)
 
         # Get a random number of npcs
@@ -162,16 +163,18 @@ class GameMap:
 
                 if npc_choice == 'bob':
                     fighter_component = Fighter(hp=20, defense=0, power=4, xp=0)
-                    #ai_component = BasicMonster()
+                    social_component = Social(bond=0)
+                    ai_component = BasicNPC()
 
                     npc = Entity(x, y, 'b', libtcod.desaturated_green, 'Bob', blocks=True,
-                                     render_order=RenderOrder.ACTOR, fighter=fighter_component)
+                                     render_order=RenderOrder.ACTOR, fighter=fighter_component, social=social_component, ai=ai_component)
                 else:
                     fighter_component = Fighter(hp=30, defense=2, power=8, xp=0)
-                    #ai_component = BasicMonster()
+                    social_component = Social(bond=0)
+                    ai_component = BasicNPC()
 
                     npc = Entity(x, y, 'R', libtcod.darker_green, 'robert', blocks=True, fighter=fighter_component,
-                                     render_order=RenderOrder.ACTOR)
+                                     render_order=RenderOrder.ACTOR, social=social_component, ai=ai_component)
 
                 entities.append(npc)
 

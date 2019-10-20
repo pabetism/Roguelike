@@ -1,6 +1,6 @@
 DONE change player char based on the direction they're going
 
-give npc's an ai that won't attack you until you attack them
+DONE give npc's an ai that won't attack you until you attack them
 
 implement a command 
 	"a" for attack which attacks the moster in your 8 adjacent tiles with the lowest hp

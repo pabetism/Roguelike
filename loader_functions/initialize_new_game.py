@@ -5,6 +5,7 @@ from components.equippable import Equippable
 from components.fighter import Fighter
 from components.inventory import Inventory
 from components.level import Level
+from components.social import Social
 
 from entity import Entity
 
@@ -49,7 +50,8 @@ def get_constants():
     fov_light_walls = True
     fov_radius = 10
 
-    max_monsters_per_room = 3
+    max_npcs_per_room = 5
+    max_monsters_per_room = 0
     max_items_per_room = 2
 
     colors = {
@@ -80,6 +82,7 @@ def get_constants():
         'fov_algorithm': fov_algorithm,
         'fov_light_walls': fov_light_walls,
         'fov_radius': fov_radius,
+        'max_nps_per_room': max_npcs_per_room,
         'max_monsters_per_room': max_monsters_per_room,
         'max_items_per_room': max_items_per_room,
         'colors': colors
@@ -90,6 +93,7 @@ def get_constants():
 
 def get_game_variables(constants):
     fighter_component = Fighter(hp=100, defense=1, power=2)
+    social_component = Social(bond=0)
     inventory_component = Inventory(26)
     level_component = Level()
     equipment_component = Equipment()

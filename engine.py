@@ -89,6 +89,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
                 if target:
                     attack_results = player.fighter.attack(target)
                     player_turn_results.extend(attack_results)
+
                 else:
                     player.move(dx, dy)
 
