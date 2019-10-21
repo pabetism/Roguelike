@@ -42,8 +42,6 @@ def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_c
 
 
 def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompute, message_log, screen_width, screen_height, map_x, bar_width, panel_height, panel_y, mouse, colors, game_state):
-    
-    
 
     if fov_recompute:
     # Draw all the tiles in the game map
@@ -79,7 +77,7 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
     libtcod.console_clear(panel)
 
     # Print the game messages, one line at a time
-    y = 1
+    y = 2
     for message in message_log.messages:
         libtcod.console_set_default_foreground(panel, message.color)
         libtcod.console_print_ex(panel, message_log.x, y, libtcod.BKGND_NONE, libtcod.LEFT, message.text)

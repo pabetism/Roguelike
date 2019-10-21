@@ -33,9 +33,9 @@ def get_constants():
     hud_width = 15
     hud_height = panel_y - 2 
 
-    message_x = bar_width + 2
+    message_x = bar_width + 3
     message_width = screen_width - bar_width - 2
-    message_height = panel_height - 1
+    message_height = panel_height - 4
 
     map_width = screen_width - hud_width - 3
     map_height = panel_y - 2

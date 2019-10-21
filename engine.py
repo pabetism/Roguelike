@@ -49,6 +49,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
         wait = action.get('wait')
         a_attack = action.get('a_attack')
         s_attack = action.get('s_attack')
+        gab = action.get('gab')
         pickup = action.get('pickup')
         show_inventory = action.get('show_inventory')
         drop_inventory = action.get('drop_inventory')
@@ -121,6 +122,11 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
         elif s_attack and game_state == GameStates.PLAYERS_TURN:
             attack_results = player.fighter.circle_attack(entities)
             player_turn_results.extend(attack_results)
+            game_state = GameStates.ENEMY_TURN
+
+        elif gab and game_state == GameStates.PLAYERS_TURN:
+            you_said = [{'message': Message('You say hello!', libtcod.white)}]
+            player_turn_results.extend(you_said)
             game_state = GameStates.ENEMY_TURN
                        
         if show_inventory:

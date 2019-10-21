@@ -57,8 +57,10 @@ def handle_player_turn_keys(key):
         return {'a_attack': True}
     elif key_char == 's':
         return {'s_attack': True}
+    elif key_char == 'f':
+        return {'gab': True}
 
-    if key_char == 'f':
+    if key_char == '+':
         # Alt+Enter: toggle full screen
         return {'fullscreen': True}
     elif key.vk == libtcod.KEY_ESCAPE:

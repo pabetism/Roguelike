@@ -8,7 +8,7 @@ implement a command
 	DONE 'a' attackes every singe target in 8 adj tiles
 	DONE "s" for attack which attacks the moster in your 8 adjacent tiles with the lowest hp
 	DONE 'a' for attack which attacks the moster in 3 tiles in FRONT of you with the lowest hp
-	if there is an alternative target, 'a' won't attack an NPC
+	DONE if there is an alternative target, 'a' won't attack an NPC
 
 implement command 
 	"s" for say(?) that initiates a conversation (you say 'ho', they don't respond) with a random npc in your 8 adjacent tiles
