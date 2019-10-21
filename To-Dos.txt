@@ -7,7 +7,7 @@ DONE figure out the damn character encodings so you can give your consoles bette
 implement a command 
 	DONE 'a' attackes every singe target in 8 adj tiles
 	DONE "a" for attack which attacks the moster in your 8 adjacent tiles with the lowest hp
-	"Shift+a" for attack which attacks the moster in 3 tiles in FRONT of you with the lowest hp
+	DONE (actually a) "Shift+a" for attack which attacks the moster in 3 tiles in FRONT of you with the lowest hp
 	if there is an alternative target, 'a' won't attack an NPC
 
 implement command 

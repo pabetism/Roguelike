@@ -117,49 +117,33 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
             preferred_target = 0
 
             if player.facing == 'Left':
-                print('player is facing left.')
                 x = player.x + 1
                 for y in range(player.y - 1, player.y + 2):
-                    print('('+str(x)+','+str(y))
-                    print('('+str(player.x)+','+str(player.y))
                     target = get_blocking_entities_at_location(entities, x, y)
-                    print(str(target))
                     if target:
                         if target.fighter.hp <= lowest_hp:
                             lowest_hp = target.fighter.hp
                             preferred_target = target
             elif player.facing == 'Right':
-                print('player is facing right.')
                 x = player.x - 1
                 for y in range(player.y - 1, player.y + 2):
-                    print('('+str(x)+','+str(y))
-                    print('('+str(player.x)+','+str(player.y))
                     target = get_blocking_entities_at_location(entities,  x, y)
-                    print(str(target))
                     if target:
                         if target.fighter.hp <= lowest_hp:
                             lowest_hp = target.fighter.hp
                             preferred_target = target
             elif player.facing == 'Up':
-                print('player is facing up.')
                 y = player.y - 1
                 for x in range(player.x - 1, player.x + 2):
-                    print('('+str(x)+','+str(y))
-                    print('('+str(player.x)+','+str(player.y))
                     target = get_blocking_entities_at_location(entities, x, y)
-                    print(str(target))
                     if target:
                         if target.fighter.hp <= lowest_hp:
                             lowest_hp = target.fighter.hp
                             preferred_target = target
             elif player.facing == 'Down':
                 y = player.y + 1
-                print('player is facing down.')
                 for x in range(player.x - 1, player.x + 2):
-                    print('('+str(x)+','+str(y))
-                    print('('+str(player.x)+','+str(player.y))
                     target = get_blocking_entities_at_location(entities, x, y)
-                    print(str(target))
                     if target:
                         if target.fighter.hp <= lowest_hp:
                             lowest_hp = target.fighter.hp

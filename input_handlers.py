@@ -24,21 +24,21 @@ def handle_player_turn_keys(key):
     key_char = chr(key.c)
 
     # Movement keys
-    if key.vk == libtcod.KEY_UP or key_char == 'k':
+    if key.vk == libtcod.KEY_UP or key_char == 'i':
         return {'move': (0, -1)}
-    elif key.vk == libtcod.KEY_DOWN or key_char == 'j':
+    elif key.vk == libtcod.KEY_DOWN or key_char == ',':
         return {'move': (0, 1)}
-    elif key.vk == libtcod.KEY_LEFT or key_char == 'h':
+    elif key.vk == libtcod.KEY_LEFT or key_char == 'j':
         return {'move': (-1, 0)}
     elif key.vk == libtcod.KEY_RIGHT or key_char == 'l':
         return {'move': (1, 0)}
-    elif key_char == 'y':
-        return {'move': (-1, -1)}
     elif key_char == 'u':
+        return {'move': (-1, -1)}
+    elif key_char == 'o':
         return {'move': (1, -1)}
-    elif key_char == 'b':
+    elif key_char == 'm':
         return {'move': (-1, 1)}
-    elif key_char == 'n':
+    elif key_char == '.':
         return {'move': (1, 1)}
     elif key_char == 'z':
         return {'wait': True}
