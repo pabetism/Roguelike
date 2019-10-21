@@ -23,7 +23,7 @@ from render_functions import RenderOrder
 def get_constants():
     window_title = 'Basic Roguelike'
 
-    screen_width = 120
+    screen_width = 100
     screen_height = 80
 
     bar_width = 20
@@ -41,8 +41,8 @@ def get_constants():
     map_height = panel_y - 2
     map_x = hud_width + 2
 
-    room_max_size = 40
-    room_min_size = 40
+    room_max_size = min(40, map_height)
+    room_min_size = min(20, room_max_size-20)
     max_rooms = 20
 
     fov_algorithm = 0
@@ -50,7 +50,7 @@ def get_constants():
     fov_radius = 12
 
     max_npcs_per_room = 5
-    max_monsters_per_room = 0
+    max_monsters_per_room = 1
     max_items_per_room = 2
 
     colors = {
