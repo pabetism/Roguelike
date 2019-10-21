@@ -41,8 +41,10 @@ def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_c
                              '{0}: {1}/{2}'.format(name, value, maximum))
 
 
-def render_all(con, panel, entities, player, game_map, fov_map, fov_recompute, message_log, screen_width, screen_height,
-               bar_width, panel_height, panel_y, mouse, colors, game_state):
+def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompute, message_log, screen_width, screen_height, map_x, bar_width, panel_height, panel_y, mouse, colors, game_state):
+    
+    
+
     if fov_recompute:
     # Draw all the tiles in the game map
         for y in range(game_map.height):
@@ -55,7 +57,6 @@ def render_all(con, panel, entities, player, game_map, fov_map, fov_recompute, m
                         libtcod.console_set_char_background(con, x, y, colors.get('light_wall'), libtcod.BKGND_SET)
                     else:
                         libtcod.console_set_char_background(con, x, y, colors.get('light_ground'), libtcod.BKGND_SET)
-
                     game_map.tiles[x][y].explored = True
                 elif game_map.tiles[x][y].explored:
                     if wall:
@@ -63,13 +64,16 @@ def render_all(con, panel, entities, player, game_map, fov_map, fov_recompute, m
                     else:
                         libtcod.console_set_char_background(con, x, y, colors.get('dark_ground'), libtcod.BKGND_SET)
 
+    #gosh, i probably don't need to redraw the borders every time!
+    draw_borders(con, game_map.height, game_map.width, colors.get('map_border'))
+
     entities_in_render_order = sorted(entities, key=lambda x: x.render_order.value)
 
     # Draw all entities in the list
     for entity in entities_in_render_order:
         draw_entity(con, entity, fov_map, game_map)
 
-    libtcod.console_blit(con, 0, 0, screen_width, screen_height, 0, 0, 0)
+    libtcod.console_blit(con, 0, 0, screen_width, screen_height, 0, map_x, 1)
 
     libtcod.console_set_default_background(panel, libtcod.black)
     libtcod.console_clear(panel)
@@ -81,18 +85,26 @@ def render_all(con, panel, entities, player, game_map, fov_map, fov_recompute, m
         libtcod.console_print_ex(panel, message_log.x, y, libtcod.BKGND_NONE, libtcod.LEFT, message.text)
         y += 1
 
-    render_bar(panel, 1, 3, bar_width, 'XP', player.level.current_xp, player.level.experience_to_next_level+5,
+    draw_borders(panel, panel.height, panel.width, colors.get('map_border'))
+
+    render_bar(panel, 2, 4, bar_width, 'XP', player.level.current_xp, player.level.experience_to_next_level+5,
                libtcod.light_yellow, libtcod.darker_yellow, libtcod.black)
-    render_bar(panel, 1, 1, bar_width, 'HP', player.fighter.hp, player.fighter.max_hp,
+    render_bar(panel, 2, 2, bar_width, 'HP', player.fighter.hp, player.fighter.max_hp,
                libtcod.light_red, libtcod.darker_red, libtcod.white)
-    libtcod.console_print_ex(panel, 1, 5, libtcod.BKGND_NONE, libtcod.LEFT,
+    libtcod.console_print_ex(panel, 2, 6, libtcod.BKGND_NONE, libtcod.LEFT,
                              'Dungeon level: {0}'.format(game_map.dungeon_level))
 
     libtcod.console_set_default_foreground(panel, libtcod.light_gray)
     libtcod.console_print_ex(panel, 1, 0, libtcod.BKGND_NONE, libtcod.LEFT,
                              get_names_under_mouse(mouse, entities, fov_map))
 
-    libtcod.console_blit(panel, 0, 0, screen_width, panel_height, 0, 0, panel_y)
+    libtcod.console_blit(panel, 0, 0, screen_width, panel_height, 0, 1, panel_y)
+
+    #blit the hud
+
+    draw_borders(hud, hud.height, hud.width, colors.get('map_border'))
+    
+    libtcod.console_blit(hud, 0, 0, hud.width, hud.height, 1, 1, 1)
 
     if game_state in (GameStates.SHOW_INVENTORY, GameStates.DROP_INVENTORY):
         if game_state == GameStates.SHOW_INVENTORY:
@@ -123,3 +135,16 @@ def draw_entity(con, entity, fov_map, game_map):
 def clear_entity(con, entity):
     # erase the character that represents this object
     libtcod.console_put_char(con, entity.x, entity.y, ' ', libtcod.BKGND_NONE)
+
+def draw_borders(con, h, w, color):
+    libtcod.console_set_default_foreground(con, color)   
+    for x in range(1, w - 1):
+        libtcod.console_put_char(con, x, 0, 205, libtcod.BKGND_NONE)
+        libtcod.console_put_char(con, x, h - 1, 205, libtcod.BKGND_NONE)
+    for y in range(1, h - 1):
+        libtcod.console_put_char(con, 0, y, 186, libtcod.BKGND_NONE)
+        libtcod.console_put_char(con, w - 1, y, 186, libtcod.BKGND_NONE)
+    libtcod.console_put_char(con, 0, 0, 201, libtcod.BKGND_NONE)
+    libtcod.console_put_char(con, w - 1, 0, 187, libtcod.BKGND_NONE)
+    libtcod.console_put_char(con, 0, h - 1, 200, libtcod.BKGND_NONE)
+    libtcod.console_put_char(con, w - 1, h - 1, 188, libtcod.BKGND_NONE)

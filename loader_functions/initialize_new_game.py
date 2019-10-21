@@ -23,24 +23,23 @@ from render_functions import RenderOrder
 def get_constants():
     window_title = 'Basic Roguelike'
 
-    screen_width = 80
-    screen_height = 50
+    screen_width = 120
+    screen_height = 80
 
     bar_width = 20
-    panel_height = 9
-    panel_y = screen_height - panel_height
+    panel_height = 20
+    panel_y = screen_height - panel_height - 1
 
-
-    hud_width = 9
-    hud_height = panel_y
+    hud_width = 15
+    hud_height = panel_y - 2 
 
     message_x = bar_width + 2
     message_width = screen_width - bar_width - 2
     message_height = panel_height - 1
 
-    map_width = screen_width - hud_width
-    map_height = screen_height - panel_height
-    map_x = hud_width
+    map_width = screen_width - hud_width - 3
+    map_height = panel_y - 2
+    map_x = hud_width + 2
 
     room_max_size = 40
     room_min_size = 40
@@ -48,7 +47,7 @@ def get_constants():
 
     fov_algorithm = 0
     fov_light_walls = True
-    fov_radius = 10
+    fov_radius = 12
 
     max_npcs_per_room = 5
     max_monsters_per_room = 0
@@ -58,7 +57,8 @@ def get_constants():
         'dark_wall': libtcod.Color(10, 10, 100),
         'dark_ground': libtcod.Color(50, 50, 150),
         'light_wall': libtcod.Color(120, 100, 50),
-        'light_ground': libtcod.Color(180, 180, 50)
+        'light_ground': libtcod.Color(180, 180, 50),
+        'map_border': libtcod.Color(180, 180, 180)
     }
 
     constants = {
@@ -107,7 +107,7 @@ def get_game_variables(constants):
     player.inventory.add_item(dagger)
     player.equipment.toggle_equip(dagger)
 
-    game_map = GameMap(constants['map_width'], constants['map_height'])
+    game_map = GameMap(constants['map_x'],constants['map_width'], constants['map_height'])
     #game_map = GameMap(constants['map_x'],constants['map_width'], constants['map_height'])
     game_map.make_map(constants['max_rooms'], constants['room_min_size'], constants['room_max_size'],
                       constants['map_width'], constants['map_height'], player, entities)

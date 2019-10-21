@@ -12,7 +12,7 @@ from menus import main_menu, message_box
 from render_functions import clear_all, render_all
 
 
-def play_game(player, entities, game_map, message_log, game_state, con, panel, constants):
+def play_game(player, entities, game_map, message_log, game_state, con, hud, panel, constants):
     fov_recompute = True
 
     fov_map = initialize_fov(game_map)
@@ -32,8 +32,8 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
             recompute_fov(fov_map, player.x, player.y, constants['fov_radius'], constants['fov_light_walls'],
                           constants['fov_algorithm'])
 
-        render_all(con, panel, entities, player, game_map, fov_map, fov_recompute, message_log,
-                   constants['screen_width'], constants['screen_height'], constants['bar_width'],
+        render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompute, message_log,
+                   constants['screen_width'], constants['screen_height'], constants['map_x'], constants['bar_width'],
                    constants['panel_height'], constants['panel_y'], mouse, constants['colors'], game_state)
 
         fov_recompute = False
@@ -281,12 +281,13 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
 def main():
     constants = get_constants()
 
-    libtcod.console_set_custom_font('arial10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
+    libtcod.console_set_custom_font('new10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_ASCII_INROW)
 
     libtcod.console_init_root(constants['screen_width'], constants['screen_height'], constants['window_title'], False)
 
-    con = libtcod.console_new(constants['screen_width'], constants['screen_height'])
-    panel = libtcod.console_new(constants['screen_width'], constants['panel_height'])
+    con = libtcod.console_new(constants['map_width'], constants['map_height'])
+    hud = libtcod.console_new(constants['hud_width'], constants['hud_height'])
+    panel = libtcod.console_new(constants['screen_width']-2, constants['panel_height'])
 
     player = None
     entities = []
@@ -338,7 +339,7 @@ def main():
 
         else:
             libtcod.console_clear(con)
-            play_game(player, entities, game_map, message_log, game_state, con, panel, constants)
+            play_game(player, entities, game_map, message_log, game_state, con, hud, panel, constants)
 
             show_main_menu = True
 

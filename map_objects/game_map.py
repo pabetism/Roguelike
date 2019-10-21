@@ -24,7 +24,8 @@ from render_functions import RenderOrder
 
 
 class GameMap:
-    def __init__(self, width, height, dungeon_level=1):
+    def __init__(self, map_x, width, height, dungeon_level=1):
+        self.map_x = map_x
         self.width = width
         self.height = height
         self.tiles = self.initialize_tiles()
@@ -48,8 +49,8 @@ class GameMap:
             w = randint(room_min_size, room_max_size)
             h = randint(room_min_size, room_max_size)
             # random position without going out of the boundaries of the map
-            x = randint(0, map_width - w - 1)
-            y = randint(0, map_height - h - 1)
+            x = randint(1, map_width - w - 2)
+            y = randint(1, map_height - h - 2)
 
             # "Rect" class makes rectangles easier to work with
             new_room = Rect(x, y, w, h)
