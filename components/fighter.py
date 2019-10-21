@@ -85,8 +85,50 @@ class Fighter:
 
         return results
     
+    # def a_attack(self)
+    #     lowest_hp=9999
+    #     preferred_target = 0
+    #     print('reg attack')
+    #     if player.facing == 'Left':
+    #         x = player.x + 1
+    #         for y in range(player.y - 1, player.y + 2):
+    #             target = get_blocking_entities_at_location(entities, x, y)
+    #             if target:
+    #                 if target.fighter.hp <= lowest_hp:
+    #                     lowest_hp = target.fighter.hp
+    #                     preferred_target = target
+    #     elif player.facing == 'Right':
+    #         x = player.x - 1
+    #         for y in range(player.y - 1, player.y + 2):
+    #             target = get_blocking_entities_at_location(entities,  x, y)
+    #             if target:
+    #                 if target.fighter.hp <= lowest_hp:
+    #                     lowest_hp = target.fighter.hp
+    #                     preferred_target = target
+    #     elif player.facing == 'Up':
+    #         y = player.y - 1
+    #         for x in range(player.x - 1, player.x + 2):
+    #             target = get_blocking_entities_at_location(entities, x, y)
+    #             if target:
+    #                 if target.fighter.hp <= lowest_hp:
+    #                     lowest_hp = target.fighter.hp
+    #                     preferred_target = target
+    #     elif player.facing == 'Down':
+    #         y = player.y + 1
+    #         for x in range(player.x - 1, player.x + 2):
+    #             target = get_blocking_entities_at_location(entities, x, y)
+    #             if target:
+    #                 if target.fighter.hp <= lowest_hp:
+    #                     lowest_hp = target.fighter.hp
+    #                     preferred_target = target
+    #     if preferred_target:
+    #         attack_results = player.fighter.attack(preferred_target)
+    #         player_turn_results.extend(attack_results)
+    #         game_state = GameStates.ENEMY_TURN
+    #     else:
+    #         player_turn_results.extend([{'message': Message('There is no one around to attack!', libtcod.white)}])
 
 
 
 
-        
+            

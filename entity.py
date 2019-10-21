@@ -143,3 +143,26 @@ def get_blocking_entities_at_location(entities, destination_x, destination_y):
             return entity
 
     return None
+
+def get_blocking_entities_in_rectangle(entities, rec_center_x, rec_center_y, rect_w, rect_h):
+    entities_in_rectangle = []
+    for entity in entities:
+        for x in range(rec_center_x - int(rect_w/2), rec_center_x + int(rect_w/2) + 1):
+            for y in range(rec_center_y - int(rect_y/2), rec_center_y + int(rect_y/2) + 1):
+                if entity.blocks and entity.x == x and entity.y == y:
+                    entities_in_rectangle.append(entity)
+
+    return entities_in_rectangle
+
+def remove_entity_fron_sublist_of_entities(target_entity, entity_list):
+    for entity in entity_list:
+        if entity == target_entity:
+            entity_list.remove(entity)
+    return entity_list
+
+
+
+
+
+
+

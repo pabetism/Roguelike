@@ -116,7 +116,6 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
         elif attack and game_state == GameStates.PLAYERS_TURN:
             lowest_hp=9999
             preferred_target = 0
-            print('reg attack')
             if player.facing == 'Left':
                 x = player.x + 1
                 for y in range(player.y - 1, player.y + 2):
