@@ -55,6 +55,8 @@ def handle_player_turn_keys(key):
         return {'show_character_screen': True}
     elif key_char == 'a':
         return {'attack': True}
+    elif key_char == 's':
+        return {'alt_attack': True}
 
     if key_char == 'f':
         # Alt+Enter: toggle full screen
