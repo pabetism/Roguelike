@@ -1,7 +1,7 @@
 import libtcodpy as libtcod
 
 from death_functions import kill_monster, kill_player
-from entity import get_blocking_entities_at_location
+from entity import get_blocking_entities_at_location, get_blocking_entities_in_rectangle,remove_entity_fron_sublist_of_entities
 from fov_functions import initialize_fov, recompute_fov
 from game_messages import Message
 from game_states import GameStates
@@ -47,8 +47,8 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
 
         move = action.get('move')
         wait = action.get('wait')
-        attack = action.get('attack')
-        alt_attack = action.get('alt_attack')
+        a_attack = action.get('a_attack')
+        s_attack = action.get('s_attack')
         pickup = action.get('pickup')
         show_inventory = action.get('show_inventory')
         drop_inventory = action.get('drop_inventory')
@@ -113,89 +113,15 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
             else:
                 message_log.add_message(Message('There is nothing here to pick up.', libtcod.yellow))
 
-        elif attack and game_state == GameStates.PLAYERS_TURN:
-            lowest_hp=9999
-            preferred_target = 0
-            if player.facing == 'Left':
-                x = player.x + 1
-                for y in range(player.y - 1, player.y + 2):
-                    target = get_blocking_entities_at_location(entities, x, y)
-                    if target:
-                        if target.fighter.hp <= lowest_hp:
-                            lowest_hp = target.fighter.hp
-                            preferred_target = target
-            elif player.facing == 'Right':
-                x = player.x - 1
-                for y in range(player.y - 1, player.y + 2):
-                    target = get_blocking_entities_at_location(entities,  x, y)
-                    if target:
-                        if target.fighter.hp <= lowest_hp:
-                            lowest_hp = target.fighter.hp
-                            preferred_target = target
-            elif player.facing == 'Up':
-                y = player.y - 1
-                for x in range(player.x - 1, player.x + 2):
-                    target = get_blocking_entities_at_location(entities, x, y)
-                    if target:
-                        if target.fighter.hp <= lowest_hp:
-                            lowest_hp = target.fighter.hp
-                            preferred_target = target
-            elif player.facing == 'Down':
-                y = player.y + 1
-                for x in range(player.x - 1, player.x + 2):
-                    target = get_blocking_entities_at_location(entities, x, y)
-                    if target:
-                        if target.fighter.hp <= lowest_hp:
-                            lowest_hp = target.fighter.hp
-                            preferred_target = target
-            if preferred_target:
-                attack_results = player.fighter.attack(preferred_target)
-                player_turn_results.extend(attack_results)
-                game_state = GameStates.ENEMY_TURN
-            else:
-                player_turn_results.extend([{'message': Message('There is no one around to attack!', libtcod.white)}])
+        elif a_attack and game_state == GameStates.PLAYERS_TURN:
+            attack_results = player.fighter.forward_attack(entities)
+            player_turn_results.extend(attack_results)
+            game_state = GameStates.ENEMY_TURN
 
-        elif alt_attack and game_state == GameStates.PLAYERS_TURN:
-            lowest_hp=9999
-            preferred_target = 0
-            if player.facing == 'Left':
-                x = player.x + 1
-                for y in range(player.y - 1, player.y + 2):
-                    target = get_blocking_entities_at_location(entities, x, y)
-                    if target:
-                        if target.fighter.hp <= lowest_hp:
-                            lowest_hp = target.fighter.hp
-                            preferred_target = target
-            elif player.facing == 'Right':
-                x = player.x - 1
-                for y in range(player.y - 1, player.y + 2):
-                    target = get_blocking_entities_at_location(entities,  x, y)
-                    if target:
-                        if target.fighter.hp <= lowest_hp:
-                            lowest_hp = target.fighter.hp
-                            preferred_target = target
-            elif player.facing == 'Up':
-                y = player.y - 1
-                for x in range(player.x - 1, player.x + 2):
-                    target = get_blocking_entities_at_location(entities, x, y)
-                    if target:
-                        if target.fighter.hp <= lowest_hp:
-                            lowest_hp = target.fighter.hp
-                            preferred_target = target
-            elif player.facing == 'Down':
-                y = player.y + 1
-                for x in range(player.x - 1, player.x + 2):
-                    target = get_blocking_entities_at_location(entities, x, y)
-                    if target:
-                        if target.fighter.hp <= lowest_hp:
-                            lowest_hp = target.fighter.hp
-                            preferred_target = target
-            if preferred_target:
-                attack_results = player.fighter.attack(preferred_target)
-                player_turn_results.extend(attack_results)
-                game_state = GameStates.ENEMY_TURN
-            else:
-                player_turn_results.extend([{'message': Message('There is no one around to attack!', libtcod.white)}])
+        elif s_attack and game_state == GameStates.PLAYERS_TURN:
+            attack_results = player.fighter.circle_attack(entities)
+            player_turn_results.extend(attack_results)
+            game_state = GameStates.ENEMY_TURN
                        
         if show_inventory:
             previous_game_state = game_state

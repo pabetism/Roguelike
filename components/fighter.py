@@ -1,7 +1,7 @@
 import libtcodpy as libtcod
 
 from game_messages import Message
-
+from entity import get_blocking_entities_in_rectangle, remove_entity_fron_sublist_of_entities
 
 class Fighter:
     def __init__(self, hp, defense, power, xp=0):
@@ -85,48 +85,72 @@ class Fighter:
 
         return results
     
-    # def a_attack(self)
-    #     lowest_hp=9999
-    #     preferred_target = 0
-    #     print('reg attack')
-    #     if player.facing == 'Left':
-    #         x = player.x + 1
-    #         for y in range(player.y - 1, player.y + 2):
-    #             target = get_blocking_entities_at_location(entities, x, y)
-    #             if target:
-    #                 if target.fighter.hp <= lowest_hp:
-    #                     lowest_hp = target.fighter.hp
-    #                     preferred_target = target
-    #     elif player.facing == 'Right':
-    #         x = player.x - 1
-    #         for y in range(player.y - 1, player.y + 2):
-    #             target = get_blocking_entities_at_location(entities,  x, y)
-    #             if target:
-    #                 if target.fighter.hp <= lowest_hp:
-    #                     lowest_hp = target.fighter.hp
-    #                     preferred_target = target
-    #     elif player.facing == 'Up':
-    #         y = player.y - 1
-    #         for x in range(player.x - 1, player.x + 2):
-    #             target = get_blocking_entities_at_location(entities, x, y)
-    #             if target:
-    #                 if target.fighter.hp <= lowest_hp:
-    #                     lowest_hp = target.fighter.hp
-    #                     preferred_target = target
-    #     elif player.facing == 'Down':
-    #         y = player.y + 1
-    #         for x in range(player.x - 1, player.x + 2):
-    #             target = get_blocking_entities_at_location(entities, x, y)
-    #             if target:
-    #                 if target.fighter.hp <= lowest_hp:
-    #                     lowest_hp = target.fighter.hp
-    #                     preferred_target = target
-    #     if preferred_target:
-    #         attack_results = player.fighter.attack(preferred_target)
-    #         player_turn_results.extend(attack_results)
-    #         game_state = GameStates.ENEMY_TURN
-    #     else:
-    #         player_turn_results.extend([{'message': Message('There is no one around to attack!', libtcod.white)}])
+    def forward_attack(self, entities):
+        self.entities = entities
+        results = []
+        lowest_hp=9999
+        preferred_target = 0
+
+        if self.owner.facing == 'Left':
+            targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x + 1, self.owner.y, 1, 3)
+            targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
+            for target in targets_in_range:
+                if target.fighter.hp <= lowest_hp:
+                    lowest_hp = target.fighter.hp
+                    preferred_target = target
+        elif self.owner.facing == 'Right':
+            targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x - 1, self.owner.y, 1, 3)
+            targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
+            for target in targets_in_range:
+                if target.fighter.hp <= lowest_hp:
+                    lowest_hp = target.fighter.hp
+                    preferred_target = target
+        elif self.owner.facing == 'Up':
+            targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x, self.owner.y - 1, 3, 1)
+            targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
+            for target in targets_in_range:
+                if target.fighter.hp <= lowest_hp:
+                    lowest_hp = target.fighter.hp
+                    preferred_target = target
+        elif self.owner.facing == 'Down':
+            targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x, self.owner.y + 1, 3, 1)
+            targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
+            for target in targets_in_range:
+                if target.fighter.hp <= lowest_hp:
+                    lowest_hp = target.fighter.hp
+                    preferred_target = target
+        if preferred_target:
+            attack_results = self.owner.fighter.attack(preferred_target)
+            results.extend(attack_results)
+        else:
+            results.extend([{'message': Message('There is no one around to attack!', libtcod.white)}])
+
+        return results
+
+    def circle_attack(self, entities):
+        self.entities = entities
+        results = []
+        lowest_hp=9999
+        preferred_target = 0
+
+        
+        targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x, self.owner.y, 3, 3)
+        targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
+        for target in targets_in_range:
+            if target.fighter.hp <= lowest_hp:
+                lowest_hp = target.fighter.hp
+                preferred_target = target
+
+        if preferred_target:
+            attack_results = self.owner.fighter.attack(preferred_target)
+            results.extend(attack_results)
+        else:
+            results.extend([{'message': Message('There is no one around to attack!', libtcod.white)}])
+
+        return results
+
+
+
 
 
 

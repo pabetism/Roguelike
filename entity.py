@@ -146,9 +146,11 @@ def get_blocking_entities_at_location(entities, destination_x, destination_y):
 
 def get_blocking_entities_in_rectangle(entities, rec_center_x, rec_center_y, rect_w, rect_h):
     entities_in_rectangle = []
+    w = rect_w + 1
+    h = rect_h + 1
     for entity in entities:
-        for x in range(rec_center_x - int(rect_w/2), rec_center_x + int(rect_w/2) + 1):
-            for y in range(rec_center_y - int(rect_y/2), rec_center_y + int(rect_y/2) + 1):
+        for x in range(rec_center_x - int(w/2), rec_center_x + int(w/2)):
+            for y in range(rec_center_y - int(h/2), rec_center_y + int(h/2)):
                 if entity.blocks and entity.x == x and entity.y == y:
                     entities_in_rectangle.append(entity)
 
