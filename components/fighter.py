@@ -74,7 +74,7 @@ class Fighter:
             previously_pissed = target.social.pissed
             if previously_pissed == False:
                 target.fighter.becomes_enemy()
-                results.append({'message': Message('{0} is pissed!'.format(target.name.capitalize()), libtcod.red)})
+                results.append({'message': Message('{0} is pissed!'.format(target.name.capitalize()), libtcod.Color(232,76,96))})
 
         return results
 

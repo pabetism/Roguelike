@@ -53,12 +53,48 @@ def get_constants():
     max_monsters_per_room = 4
     max_items_per_room = 2
 
+
+    darkest_pink = libtcod.Color(202,96,96)
+    darker_pink = libtcod.Color(222,116,116)
+    dark_pink = libtcod.Color(242,146,146)
+    light_pink = libtcod.Color(255,179,179)
+    lighter_pink = libtcod.Color(255,220,247)
+
+    dark_bluegreen = libtcod.Color(75,174,160)
+    light_bluegreen = libtcod.Color(178,228,213)
+    lighter_bluegreen = libtcod.Color(231,243,238)
+
+    orange = libtcod.Color(248,169,120)
+    dark_orange = libtcod.Color(228,129,100)
+
+    black = libtcod.Color(0,0,0)
+
+    purple = libtcod.Color(189,131,206)
     colors = {
-        'dark_wall': libtcod.Color(10, 10, 100),
-        'dark_ground': libtcod.Color(50, 50, 150),
-        'light_wall': libtcod.Color(120, 100, 50),
-        'light_ground': libtcod.Color(180, 180, 50),
-        'map_border': libtcod.Color(180, 180, 180)
+        'dark_wall_bg': lighter_bluegreen,#libtcod.Color(182,230,189),
+        'dark_wall_fg': dark_bluegreen,
+        'light_wall_bg': lighter_bluegreen,
+        'light_wall_fg': light_bluegreen,
+        'dark_ground_bg': dark_pink,
+        'dark_ground_fg': darker_pink, #libtcod.Color(177,142,166),
+        'light_ground_bg': light_pink,
+        'light_ground_fg': lighter_pink,
+        'map_border': orange,
+        'hp_bg1': darker_pink,
+        'hp_bg2': light_pink,
+        'hp_fg': black,
+        'xp_bg1': dark_bluegreen,
+        'xp_bg2': light_bluegreen,
+        'xp_fg': black,
+        'bad_alert': darkest_pink,
+        'moderate_alert': dark_orange,
+        'good_alert': purple
+    }
+
+    map_chars = {
+        'wall_char': 8,
+        'ground_char': 176,
+        'empty_char': 0
     }
 
     constants = {
@@ -85,7 +121,8 @@ def get_constants():
         'max_nps_per_room': max_npcs_per_room,
         'max_monsters_per_room': max_monsters_per_room,
         'max_items_per_room': max_items_per_room,
-        'colors': colors
+        'colors': colors,
+        'map_chars': map_chars
     }
 
     return constants

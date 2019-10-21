@@ -30,18 +30,18 @@ def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_c
     bar_width = int(float(value) / maximum * total_width)
 
     libtcod.console_set_default_background(panel, back_color)
-    libtcod.console_rect(panel, x, y, total_width, 1, False, libtcod.BKGND_SCREEN)
+    libtcod.console_rect(panel, x, y, total_width, 1, False, libtcod.BKGND_SET)
 
     libtcod.console_set_default_background(panel, bar_color)
     if bar_width > 0:
-        libtcod.console_rect(panel, x, y, bar_width, 1, False, libtcod.BKGND_SCREEN)
+        libtcod.console_rect(panel, x, y, bar_width, 1, False, libtcod.BKGND_SET)
 
     libtcod.console_set_default_foreground(panel, font_color)
     libtcod.console_print_ex(panel, int(x + total_width / 2), y, libtcod.BKGND_NONE, libtcod.CENTER,
                              '{0}: {1}/{2}'.format(name, value, maximum))
 
 
-def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompute, message_log, screen_width, screen_height, map_x, bar_width, panel_height, panel_y, mouse, colors, game_state):
+def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompute, message_log, screen_width, screen_height, map_x, bar_width, panel_height, panel_y, mouse, colors, map_chars, game_state):
 
     if fov_recompute:
     # Draw all the tiles in the game map
@@ -52,16 +52,25 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
 
                 if visible:
                     if wall:
-                        libtcod.console_set_char_background(con, x, y, colors.get('light_wall'), libtcod.BKGND_SET)
+                        libtcod.console_set_default_foreground(con, colors.get('light_wall_fg'))   
+                        libtcod.console_set_default_background(con, colors.get('light_wall_bg'))
+                        libtcod.console_put_char(con, x, y, map_chars.get('wall_char'), libtcod.BKGND_SET)
                     else:
-                        libtcod.console_set_char_background(con, x, y, colors.get('light_ground'), libtcod.BKGND_SET)
+                        libtcod.console_set_default_foreground(con, colors.get('light_ground_fg'))   
+                        libtcod.console_set_default_background(con, colors.get('light_ground_bg'))
+                        libtcod.console_put_char(con, x, y, map_chars.get('ground_char'), libtcod.BKGND_SET)
                     game_map.tiles[x][y].explored = True
                 elif game_map.tiles[x][y].explored:
                     if wall:
-                        libtcod.console_set_char_background(con, x, y, colors.get('dark_wall'), libtcod.BKGND_SET)
+                        libtcod.console_set_default_foreground(con, colors.get('dark_wall_fg'))
+                        libtcod.console_set_default_background(con, colors.get('dark_wall_bg'))
+                        libtcod.console_put_char(con, x, y, map_chars.get('wall_char'), libtcod.BKGND_SET)
                     else:
-                        libtcod.console_set_char_background(con, x, y, colors.get('dark_ground'), libtcod.BKGND_SET)
-
+                        libtcod.console_set_default_foreground(con, colors.get('dark_ground_fg'))   
+                        libtcod.console_set_default_background(con, colors.get('dark_ground_bg'))
+                        libtcod.console_put_char(con, x, y, map_chars.get('ground_char'), libtcod.BKGND_SET)
+        libtcod.console_set_default_foreground(con, libtcod.Color(0,0,0))   
+        libtcod.console_set_default_background(con, libtcod.Color(0,0,0))
     #gosh, i probably don't need to redraw the borders every time!
     draw_borders(con, game_map.height, game_map.width, colors.get('map_border'))
 
@@ -69,7 +78,7 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
 
     # Draw all entities in the list
     for entity in entities_in_render_order:
-        draw_entity(con, entity, fov_map, game_map)
+        draw_entity(con, entity, fov_map, game_map, colors)
 
     libtcod.console_blit(con, 0, 0, screen_width, screen_height, 0, map_x, 1)
 
@@ -85,10 +94,12 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
 
     draw_borders(panel, panel.height, panel.width, colors.get('map_border'))
 
-    render_bar(panel, 2, 4, bar_width, 'XP', player.level.current_xp, player.level.experience_to_next_level+5,
-               libtcod.light_yellow, libtcod.darker_yellow, libtcod.black)
+    # render HP bar
     render_bar(panel, 2, 2, bar_width, 'HP', player.fighter.hp, player.fighter.max_hp,
-               libtcod.light_red, libtcod.darker_red, libtcod.white)
+               colors.get('hp_bg1'), colors.get('hp_bg2'), colors.get('hp_fg'))
+    # render XP bar
+    render_bar(panel, 2, 4, bar_width, 'XP', player.level.current_xp, player.level.experience_to_next_level,
+               colors.get('xp_bg1'), colors.get('xp_bg2'), colors.get('xp_fg'))
     libtcod.console_print_ex(panel, 2, 6, libtcod.BKGND_NONE, libtcod.LEFT,
                              'Dungeon level: {0}'.format(game_map.dungeon_level))
 
@@ -119,20 +130,24 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
         character_screen(player, 30, 10, screen_width, screen_height)
 
 
-def clear_all(con, entities):
+def clear_all(con, entities, map_chars, game_map):
     for entity in entities:
-        clear_entity(con, entity)
+        clear_entity(con, entity, map_chars, game_map)
 
 
-def draw_entity(con, entity, fov_map, game_map):
+def draw_entity(con, entity, fov_map, game_map, colors):
     if libtcod.map_is_in_fov(fov_map, entity.x, entity.y) or (entity.stairs and game_map.tiles[entity.x][entity.y].explored):
         libtcod.console_set_default_foreground(con, entity.color)
+        libtcod.console_set_default_background(con, colors.get('light_ground_bg'))
         libtcod.console_put_char(con, entity.x, entity.y, entity.char, libtcod.BKGND_NONE)
 
 
-def clear_entity(con, entity):
+def clear_entity(con, entity, map_chars, game_map):
     # erase the character that represents this object
-    libtcod.console_put_char(con, entity.x, entity.y, ' ', libtcod.BKGND_NONE)
+    if game_map.tiles[entity.x][entity.y].explored:
+        libtcod.console_put_char(con, entity.x, entity.y, map_chars.get('ground_char'), libtcod.BKGND_NONE)
+    else:
+        libtcod.console_put_char(con, entity.x, entity.y, map_chars.get('empty_char'), libtcod.BKGND_NONE)
 
 def draw_borders(con, h, w, color):
     libtcod.console_set_default_foreground(con, color)   

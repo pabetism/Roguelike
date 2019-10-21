@@ -32,18 +32,18 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
             recompute_fov(fov_map, player.x, player.y, constants['fov_radius'], constants['fov_light_walls'],
                           constants['fov_algorithm'])
 
-        render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompute, message_log,
-                   constants['screen_width'], constants['screen_height'], constants['map_x'], constants['bar_width'],
-                   constants['panel_height'], constants['panel_y'], mouse, constants['colors'], game_state)
+        render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompute, message_log, constants['screen_width'], constants['screen_height'], constants['map_x'], constants['bar_width'], constants['panel_height'], constants['panel_y'], mouse, constants['colors'], constants['map_chars'], game_state)
 
         fov_recompute = False
 
         libtcod.console_flush()
 
-        clear_all(con, entities)
+        clear_all(con, entities, constants['map_chars'], game_map)
 
         action = handle_keys(key, game_state)
         mouse_action = handle_mouse(mouse)
+
+        colors = constants['colors']
 
         move = action.get('move')
         wait = action.get('wait')
@@ -212,9 +212,9 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
 
             if dead_entity:
                 if dead_entity == player:
-                    message, game_state = kill_player(dead_entity)
+                    message, game_state = kill_player(dead_entity, colors.get('bad_alert'), colors.get('bad_alert'))
                 else:
-                    message = kill_monster(dead_entity)
+                    message = kill_monster(dead_entity, colors.get('moderate_alert'), colors.get('moderate_alert'))
 
                 message_log.add_message(message)
 
@@ -282,7 +282,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
 
                         if dead_entity:
                             if dead_entity == player:
-                                message, game_state = kill_player(dead_entity)
+                                message, game_state = kill_player(dead_entity, colors.get('bad_alert'), colors.get('bad_alert'))
                             else:
                                 message = kill_monster(dead_entity)
 
@@ -295,6 +295,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
                         break
             else:
                 game_state = GameStates.PLAYERS_TURN
+            fov_recompute = True
 
 
 def main():
