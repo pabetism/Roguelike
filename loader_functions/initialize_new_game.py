@@ -49,8 +49,8 @@ def get_constants():
     fov_light_walls = True
     fov_radius = 12
 
-    max_npcs_per_room = 5
-    max_monsters_per_room = 1
+    max_npcs_per_room = 7
+    max_monsters_per_room = 4
     max_items_per_room = 2
 
     colors = {

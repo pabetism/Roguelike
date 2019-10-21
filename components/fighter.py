@@ -89,6 +89,7 @@ class Fighter:
         self.entities = entities
         results = []
         lowest_hp=9999
+        preferred_npc_target = 0
         preferred_target = 0
 
         if self.owner.facing == 'Left':
@@ -97,30 +98,41 @@ class Fighter:
             for target in targets_in_range:
                 if target.fighter.hp <= lowest_hp:
                     lowest_hp = target.fighter.hp
-                    preferred_target = target
+                    preferred_npc_target = target
+                    if not target.social:
+                        preferred_target = target        
         elif self.owner.facing == 'Right':
             targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x - 1, self.owner.y, 1, 3)
             targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
             for target in targets_in_range:
                 if target.fighter.hp <= lowest_hp:
                     lowest_hp = target.fighter.hp
-                    preferred_target = target
+                    preferred_npc_target = target
+                    if not target.social:
+                        preferred_target = target        
         elif self.owner.facing == 'Up':
             targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x, self.owner.y - 1, 3, 1)
             targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
             for target in targets_in_range:
                 if target.fighter.hp <= lowest_hp:
                     lowest_hp = target.fighter.hp
-                    preferred_target = target
+                    preferred_npc_target = target
+                    if not target.social:
+                        preferred_target = target        
         elif self.owner.facing == 'Down':
             targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x, self.owner.y + 1, 3, 1)
             targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
             for target in targets_in_range:
                 if target.fighter.hp <= lowest_hp:
                     lowest_hp = target.fighter.hp
-                    preferred_target = target
+                    preferred_npc_target = target
+                    if not target.social:
+                        preferred_target = target = target
         if preferred_target:
             attack_results = self.owner.fighter.attack(preferred_target)
+            results.extend(attack_results)
+        elif preferred_npc_target:
+            attack_results = self.owner.fighter.attack(preferred_npc_target)
             results.extend(attack_results)
         else:
             results.extend([{'message': Message('There is no one around to attack!', libtcod.white)}])
@@ -131,18 +143,23 @@ class Fighter:
         self.entities = entities
         results = []
         lowest_hp=9999
+        preferred_npc_target = 0
         preferred_target = 0
-
         
         targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x, self.owner.y, 3, 3)
         targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
         for target in targets_in_range:
             if target.fighter.hp <= lowest_hp:
                 lowest_hp = target.fighter.hp
-                preferred_target = target
+                preferred_npc_target = target
+                if not target.social:
+                    preferred_target = target
 
         if preferred_target:
             attack_results = self.owner.fighter.attack(preferred_target)
+            results.extend(attack_results)
+        elif preferred_npc_target:
+            attack_results = self.owner.fighter.attack(preferred_npc_target)
             results.extend(attack_results)
         else:
             results.extend([{'message': Message('There is no one around to attack!', libtcod.white)}])
