@@ -74,6 +74,15 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
     #gosh, i probably don't need to redraw the borders every time!
     draw_borders(con, game_map.height, game_map.width, colors.get('map_border'))
 
+    libtcod.console_set_default_foreground(con, colors.get('map_border'))
+    libtcod.console_set_default_background(con, libtcod.black)
+
+    libtcod.console_put_char(con, 2, game_map.height - 1, 181, libtcod.BKGND_SET)
+    libtcod.console_print_ex(con, 3, game_map.height - 1, libtcod.BKGND_SET, libtcod.LEFT, '          ')
+    libtcod.console_put_char(con, 13, game_map.height - 1, 198, libtcod.BKGND_SET)
+    libtcod.console_print_ex(con, 3, game_map.height - 1, libtcod.BKGND_SET, libtcod.LEFT, get_names_under_mouse(mouse, entities, fov_map))
+        
+
     entities_in_render_order = sorted(entities, key=lambda x: x.render_order.value)
 
     # Draw all entities in the list
@@ -100,12 +109,12 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
     # render XP bar
     render_bar(panel, 2, 4, bar_width, 'XP', player.level.current_xp, player.level.experience_to_next_level,
                colors.get('xp_bg1'), colors.get('xp_bg2'), colors.get('xp_fg'))
-    libtcod.console_print_ex(panel, 2, 6, libtcod.BKGND_NONE, libtcod.LEFT,
-                             'Dungeon level: {0}'.format(game_map.dungeon_level))
 
-    libtcod.console_set_default_foreground(panel, libtcod.light_gray)
-    libtcod.console_print_ex(panel, 1, 0, libtcod.BKGND_NONE, libtcod.LEFT,
-                             get_names_under_mouse(mouse, entities, fov_map))
+    libtcod.console_set_default_background(panel, libtcod.black)
+
+    libtcod.console_set_default_foreground(panel, libtcod.white)
+
+    libtcod.console_print_ex(panel, 2, 6, libtcod.BKGND_SET, libtcod.LEFT, 'Dungeon level: {0}'.format(game_map.dungeon_level))
 
     libtcod.console_blit(panel, 0, 0, screen_width, panel_height, 0, 1, panel_y)
 
