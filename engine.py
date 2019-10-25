@@ -133,24 +133,35 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
             game_state = GameStates.ENEMY_TURN
 
         elif gab and game_state == GameStates.PLAYERS_TURN:
-            entities_near_player = get_blocking_entities_in_rectangle(entities, player.x, player.y, 3, 3)
-            npcs_near_player = get_npcs_in_list(entities_near_player)
-            remove_entity_from_sublist_of_entities(player, entities_near_player)
-            if npcs_near_player:
-                remove_entity_from_sublist_of_entities(npcs_near_player, entities_near_player)
-            if npcs_near_player:
-                you_said = [{'message': Message('You say hello, and you get a wave back!', libtcod.white)}]
-                player_turn_results.extend(you_said)
-                game_state = GameStates.ENEMY_TURN
-            elif entities_near_player:
-                you_said = [{'message': Message('You say hello, but you only get a growl in return!', libtcod.white)}]
-                player_turn_results.extend(you_said)
-                game_state = GameStates.ENEMY_TURN
+            if player.facing == 'Right':
+                target_x = player.x - 1
+                target_y = player.y
+            elif player.facing == 'Left':
+                target_x = player.x + 1
+                target_y = player.y
+            elif player.facing == 'Up':
+                target_x = player.x
+                target_y = player.y - 1
+            elif player.facing == 'Down':
+                target_x = player.x
+                target_y = player.y + 1
+            entity_near = get_blocking_entities_at_location(entities, target_x, target_y)
+            if entity_near:
+                if entity_near.social:
+                    you_said = [{'message': Message('You say hello to {0}, and they wave back!'.format(entity_near.name.capitalize()), libtcod.white)}]
+                    player_turn_results.extend(you_said)
+                    game_state = GameStates.ENEMY_TURN
+
+                elif entity_near.fighter:
+                    you_said = [{'message': Message('You say hello, but you only get a growl in return!', libtcod.white)}]
+                    player_turn_results.extend(you_said)
+                    game_state = GameStates.ENEMY_TURN
+
             else:        
-                you_said = [{'message': Message('You say hello, but no one responds. No one is near!', libtcod.white)}]
+                you_said = [{'message': Message('You say hello, but see no one.', libtcod.white)}]
                 player_turn_results.extend(you_said)
                 game_state = GameStates.ENEMY_TURN
-          
+             
         if show_inventory:
             previous_game_state = game_state
             game_state = GameStates.SHOW_INVENTORY

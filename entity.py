@@ -138,10 +138,9 @@ class Entity:
         libtcod.path_delete(my_path)
 
 def get_npcs_in_list(entities):
-    for entity in entities:
-        if entity:
+    if entities:
+        for entity in entities:
             if entity.social:
-                print("current entity:" + str(entity.name))
                 return entity
 	
 
@@ -165,9 +164,10 @@ def get_blocking_entities_in_rectangle(entities, rec_center_x, rec_center_y, rec
     return entities_in_rectangle
 
 def remove_entity_from_sublist_of_entities(target_entity, entity_list):
-    for entity in entity_list:
-        if entity == target_entity:
-            entity_list.remove(entity)
+    if entity_list:
+        for entity in entity_list:
+            if entity == target_entity:
+                entity_list.remove(entity)
     return entity_list
 
 
