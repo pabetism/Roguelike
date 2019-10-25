@@ -1,0 +1,12 @@
+Version 1.0 has the following features:
+- on top of TStan90's base roguelike, we've added
+	- an XP bar!
+	- basic npcs
+	- sprite changes with direction of movement!
+	- npc's only attack if provoked
+	- the panel and con now have a fancy border
+	- a and s are both attacks, both preference the least HP non-npc blocking entity
+	- readme, license, and code of conduct added
+	- uiojlm,. are now the (numpad-like) movement keys, arrows still work
+	- a colorscheme like unicorn vomit
+	- bug fixes!	
