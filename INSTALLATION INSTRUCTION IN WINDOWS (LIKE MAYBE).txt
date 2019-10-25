@@ -1,0 +1,77 @@
+HOW TO PLAY MY GAME 
+if you run one of the stupid machines that eats your soul and feeds it to the (once) richest man in the world
+
+0. Open Command Prompt (I think you can do this by pressing Windowskey + R)
+
+1. Check to see if chocolatey is installed:
+
+```
+choco
+```
+
+2. If the choco command isn't recognized, then run the following code to install chocolatey, an apt-like packagemanager for Windows (if the command is recognized, you can skip this step) (IF YOU HAVE AND KNOW ABOUT SOME OTHER PACKAGE MANAGER ON YOUR SYSTEM, THEN USE THAT TO DOWLOAD PYTHON3 AND GIT, WHICH I ASSUME YOU KNOW HOW TO DO IF YOU HAVE ANOTHER PACKAGE MANAGER):
+
+```
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+```
+
+
+3. Now type the following to instal python3, which is the language in which the game is written:
+
+```
+choco install python3
+```
+
+
+4. And finally, type type the following to get the python packages needed to run the Roguelike (you might run into trouble here, since I'm not familiar with how windows dealt with the python2/3 split):
+
+```
+py -m pip install tcod
+```
+
+
+5. When that is done, type the following to instal git, a software repository for software (so meta) (this could be helpful for you, for, like, pico or twine things if you wanna keep track of past versions of things your projects):
+
+```
+Choco install git
+```
+
+
+6. Now, like make a directory in your documents folder (or wherever) called "Projects" (Or whatever). This can *probably* be accomplished with the following commands (fucking windows is weird. WTF IS THIS BACKSLASH BUSINESS??? Unix forever.):
+
+```
+mkdir ~\Documents\Projects
+cd ~\Documents\Projects
+```
+
+
+7. now you're going to clone my git repository to this folder. It'll clone INTO it's own folder in this folder:
+MAKE SURE YOU ARE IN THE FOLDER YOU WANT THIS PROJECT FOLDER TO BE IN
+uuuhh, also you may have to make a GitHub account for this? I don't think so, you probably only need to do that if you want to push your version of the software into the repository. (And like, you can be a contributor if you're into that :))
+
+```
+git clone https://github.com/pabetism/Roguelike.git
+```
+
+
+
+8. Yeah, cool. Now go into the repository you just downloaded:
+
+```
+cd Roguelike
+git checkout v1.0
+```
+
+9. And try the command 
+
+```
+py engine.py
+```
+
+
+Wow if that actually works I'll be AMAZED
+
+
+
+
+
