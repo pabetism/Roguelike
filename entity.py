@@ -2,6 +2,7 @@ import libtcodpy as libtcod
 
 import math
 
+import components.social
 from components.item import Item
 
 from render_functions import RenderOrder
@@ -136,6 +137,13 @@ class Entity:
             # Delete the path to free memory
         libtcod.path_delete(my_path)
 
+def get_npcs_in_list(entities):
+    for entity in entities:
+        if entity:
+            if entity.social:
+                print("current entity:" + str(entity.name))
+                return entity
+	
 
 def get_blocking_entities_at_location(entities, destination_x, destination_y):
     for entity in entities:
@@ -156,7 +164,7 @@ def get_blocking_entities_in_rectangle(entities, rec_center_x, rec_center_y, rec
 
     return entities_in_rectangle
 
-def remove_entity_fron_sublist_of_entities(target_entity, entity_list):
+def remove_entity_from_sublist_of_entities(target_entity, entity_list):
     for entity in entity_list:
         if entity == target_entity:
             entity_list.remove(entity)

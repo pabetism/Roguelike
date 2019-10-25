@@ -1,7 +1,7 @@
 import libtcodpy as libtcod
 
 from game_messages import Message
-from entity import get_blocking_entities_in_rectangle, remove_entity_fron_sublist_of_entities
+from entity import get_blocking_entities_in_rectangle, remove_entity_from_sublist_of_entities
 
 class Fighter:
     def __init__(self, hp, defense, power, xp=0):
@@ -94,7 +94,7 @@ class Fighter:
 
         if self.owner.facing == 'Left':
             targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x + 1, self.owner.y, 1, 3)
-            targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
+            targets_in_range = remove_entity_from_sublist_of_entities(self.owner, targets_in_range)
             for target in targets_in_range:
                 if target.fighter.hp <= lowest_hp:
                     lowest_hp = target.fighter.hp
@@ -103,7 +103,7 @@ class Fighter:
                         preferred_target = target        
         elif self.owner.facing == 'Right':
             targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x - 1, self.owner.y, 1, 3)
-            targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
+            targets_in_range = remove_entity_from_sublist_of_entities(self.owner, targets_in_range)
             for target in targets_in_range:
                 if target.fighter.hp <= lowest_hp:
                     lowest_hp = target.fighter.hp
@@ -112,7 +112,7 @@ class Fighter:
                         preferred_target = target        
         elif self.owner.facing == 'Up':
             targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x, self.owner.y - 1, 3, 1)
-            targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
+            targets_in_range = remove_entity_from_sublist_of_entities(self.owner, targets_in_range)
             for target in targets_in_range:
                 if target.fighter.hp <= lowest_hp:
                     lowest_hp = target.fighter.hp
@@ -121,7 +121,7 @@ class Fighter:
                         preferred_target = target        
         elif self.owner.facing == 'Down':
             targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x, self.owner.y + 1, 3, 1)
-            targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
+            targets_in_range = remove_entity_from_sublist_of_entities(self.owner, targets_in_range)
             for target in targets_in_range:
                 if target.fighter.hp <= lowest_hp:
                     lowest_hp = target.fighter.hp
@@ -147,7 +147,7 @@ class Fighter:
         preferred_target = 0
         
         targets_in_range = get_blocking_entities_in_rectangle(entities, self.owner.x, self.owner.y, 3, 3)
-        targets_in_range = remove_entity_fron_sublist_of_entities(self.owner, targets_in_range)
+        targets_in_range = remove_entity_from_sublist_of_entities(self.owner, targets_in_range)
         for target in targets_in_range:
             if target.fighter.hp <= lowest_hp:
                 lowest_hp = target.fighter.hp

@@ -1,7 +1,15 @@
 import libtcodpy as libtcod
 
+import os
+import PyInstaller.__main__
+
+#Uncomment the follwoing lines to make a distributable executable: (more info at pyinstaller.readthedocs.io/en/stable/usage.html#running-pyinstaller-from-python-code)
+#PyInstaller.__main__.run([
+#     os.path.join('engine.py'),
+#])
+
 from death_functions import kill_monster, kill_player
-from entity import get_blocking_entities_at_location, get_blocking_entities_in_rectangle,remove_entity_fron_sublist_of_entities
+from entity import get_blocking_entities_at_location, get_blocking_entities_in_rectangle,remove_entity_from_sublist_of_entities, get_npcs_in_list
 from fov_functions import initialize_fov, recompute_fov
 from game_messages import Message
 from game_states import GameStates
@@ -34,16 +42,16 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
 
         render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompute, message_log, constants['screen_width'], constants['screen_height'], constants['map_x'], constants['bar_width'], constants['panel_height'], constants['panel_y'], mouse, constants['colors'], constants['map_chars'], game_state)
 
+        colors = constants['colors']
+
         fov_recompute = False
 
         libtcod.console_flush()
 
-        clear_all(con, entities, constants['map_chars'], game_map)
+        clear_all(con, entities, constants['map_chars'], game_map, colors)
 
         action = handle_keys(key, game_state)
         mouse_action = handle_mouse(mouse)
-
-        colors = constants['colors']
 
         move = action.get('move')
         wait = action.get('wait')
@@ -125,10 +133,24 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
             game_state = GameStates.ENEMY_TURN
 
         elif gab and game_state == GameStates.PLAYERS_TURN:
-            you_said = [{'message': Message('You say hello!', libtcod.white)}]
-            player_turn_results.extend(you_said)
-            game_state = GameStates.ENEMY_TURN
-                       
+            entities_near_player = get_blocking_entities_in_rectangle(entities, player.x, player.y, 3, 3)
+            npcs_near_player = get_npcs_in_list(entities_near_player)
+            remove_entity_from_sublist_of_entities(player, entities_near_player)
+            if npcs_near_player:
+                remove_entity_from_sublist_of_entities(npcs_near_player, entities_near_player)
+            if npcs_near_player:
+                you_said = [{'message': Message('You say hello, and you get a wave back!', libtcod.white)}]
+                player_turn_results.extend(you_said)
+                game_state = GameStates.ENEMY_TURN
+            elif entities_near_player:
+                you_said = [{'message': Message('You say hello, but you only get a growl in return!', libtcod.white)}]
+                player_turn_results.extend(you_said)
+                game_state = GameStates.ENEMY_TURN
+            else:        
+                you_said = [{'message': Message('You say hello, but no one responds. No one is near!', libtcod.white)}]
+                player_turn_results.extend(you_said)
+                game_state = GameStates.ENEMY_TURN
+          
         if show_inventory:
             previous_game_state = game_state
             game_state = GameStates.SHOW_INVENTORY
@@ -152,6 +174,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, hud, pan
                     entities = game_map.next_floor(player, message_log, constants)
                     fov_map = initialize_fov(game_map)
                     fov_recompute = True
+                    libtcod.console_set_default_background(con, libtcod.black)
                     libtcod.console_clear(con)
 
                     break
