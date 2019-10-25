@@ -37,7 +37,7 @@ def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_c
         libtcod.console_rect(panel, x, y, bar_width, 1, False, libtcod.BKGND_SET)
 
     libtcod.console_set_default_foreground(panel, font_color)
-    libtcod.console_print_ex(panel, int(x + total_width / 2), y, libtcod.BKGND_NONE, libtcod.CENTER,
+    libtcod.console_print_ex(panel, int(x + total_width / 2), y, libtcod.BKGND_SET, libtcod.CENTER,
                              '{0}: {1}/{2}'.format(name, value, maximum))
 
 
@@ -69,18 +69,20 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
                         libtcod.console_set_default_foreground(con, colors.get('dark_ground_fg'))   
                         libtcod.console_set_default_background(con, colors.get('dark_ground_bg'))
                         libtcod.console_put_char(con, x, y, map_chars.get('ground_char'), libtcod.BKGND_SET)
-        libtcod.console_set_default_foreground(con, libtcod.Color(0,0,0))   
-        libtcod.console_set_default_background(con, libtcod.Color(0,0,0))
+    #libtcod.console_set_default_foreground(con, libtcod.black)   
+    #libtcod.console_set_default_background(con, libtcod.black)
+
     #gosh, i probably don't need to redraw the borders every time!
     draw_borders(con, game_map.height, game_map.width, colors.get('map_border'))
 
-    libtcod.console_set_default_foreground(con, colors.get('map_border'))
-    libtcod.console_set_default_background(con, libtcod.black)
+    #the code below is the begining of a bit of code to add information at the bottom edge of the con
+    #libtcod.console_set_default_foreground(con, colors.get('map_border'))
+    #libtcod.console_set_default_background(con, libtcod.black)
 
-    libtcod.console_put_char(con, 2, game_map.height - 1, 181, libtcod.BKGND_SET)
-    libtcod.console_print_ex(con, 3, game_map.height - 1, libtcod.BKGND_SET, libtcod.LEFT, '          ')
-    libtcod.console_put_char(con, 13, game_map.height - 1, 198, libtcod.BKGND_SET)
-    libtcod.console_print_ex(con, 3, game_map.height - 1, libtcod.BKGND_SET, libtcod.LEFT, get_names_under_mouse(mouse, entities, fov_map))
+    #libtcod.console_put_char(con, 2, game_map.height - 1, 181, libtcod.BKGND_SET)
+    #libtcod.console_print_ex(con, 3, game_map.height - 1, libtcod.BKGND_SET, libtcod.LEFT, '          ')
+    #libtcod.console_put_char(con, 13, game_map.height - 1, 198, libtcod.BKGND_SET)
+    #libtcod.console_print_ex(con, 3, game_map.height - 1, libtcod.BKGND_SET, libtcod.LEFT, get_names_under_mouse(mouse, entities, fov_map))
         
 
     entities_in_render_order = sorted(entities, key=lambda x: x.render_order.value)
@@ -98,7 +100,7 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
     y = 2
     for message in message_log.messages:
         libtcod.console_set_default_foreground(panel, message.color)
-        libtcod.console_print_ex(panel, message_log.x, y, libtcod.BKGND_NONE, libtcod.LEFT, message.text)
+        libtcod.console_print_ex(panel, message_log.x, y, libtcod.BKGND_SET, libtcod.LEFT, message.text)
         y += 1
 
     draw_borders(panel, panel.height, panel.width, colors.get('map_border'))
@@ -111,7 +113,6 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
                colors.get('xp_bg1'), colors.get('xp_bg2'), colors.get('xp_fg'))
 
     libtcod.console_set_default_background(panel, libtcod.black)
-
     libtcod.console_set_default_foreground(panel, libtcod.white)
 
     libtcod.console_print_ex(panel, 2, 6, libtcod.BKGND_SET, libtcod.LEFT, 'Dungeon level: {0}'.format(game_map.dungeon_level))
@@ -139,34 +140,38 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
         character_screen(player, 30, 10, screen_width, screen_height)
 
 
-def clear_all(con, entities, map_chars, game_map):
+def clear_all(con, entities, map_chars, game_map, colors):
     for entity in entities:
-        clear_entity(con, entity, map_chars, game_map)
+        clear_entity(con, entity, map_chars, game_map, colors)
 
 
 def draw_entity(con, entity, fov_map, game_map, colors):
     if libtcod.map_is_in_fov(fov_map, entity.x, entity.y) or (entity.stairs and game_map.tiles[entity.x][entity.y].explored):
         libtcod.console_set_default_foreground(con, entity.color)
         libtcod.console_set_default_background(con, colors.get('light_ground_bg'))
-        libtcod.console_put_char(con, entity.x, entity.y, entity.char, libtcod.BKGND_NONE)
+        libtcod.console_put_char(con, entity.x, entity.y, entity.char, libtcod.BKGND_SET)
 
 
-def clear_entity(con, entity, map_chars, game_map):
+def clear_entity(con, entity, map_chars, game_map, colors):
     # erase the character that represents this object
     if game_map.tiles[entity.x][entity.y].explored:
-        libtcod.console_put_char(con, entity.x, entity.y, map_chars.get('ground_char'), libtcod.BKGND_NONE)
+        libtcod.console_set_default_background(con, colors.get('dark_ground_bg'))
+        libtcod.console_set_default_foreground(con, colors.get('dark_ground_fg'))
+        libtcod.console_put_char(con, entity.x, entity.y, map_chars.get('ground_char'), libtcod.BKGND_SET)
     else:
-        libtcod.console_put_char(con, entity.x, entity.y, map_chars.get('empty_char'), libtcod.BKGND_NONE)
+        libtcod.console_set_default_background(con, libtcod.black)
+        libtcod.console_put_char(con, entity.x, entity.y, map_chars.get('empty_char'), libtcod.BKGND_SET)
 
 def draw_borders(con, h, w, color):
+    libtcod.console_set_default_background(con, libtcod.black)
     libtcod.console_set_default_foreground(con, color)   
     for x in range(1, w - 1):
-        libtcod.console_put_char(con, x, 0, 205, libtcod.BKGND_NONE)
-        libtcod.console_put_char(con, x, h - 1, 205, libtcod.BKGND_NONE)
+        libtcod.console_put_char(con, x, 0, 205, libtcod.BKGND_SET)
+        libtcod.console_put_char(con, x, h - 1, 205, libtcod.BKGND_SET)
     for y in range(1, h - 1):
-        libtcod.console_put_char(con, 0, y, 186, libtcod.BKGND_NONE)
-        libtcod.console_put_char(con, w - 1, y, 186, libtcod.BKGND_NONE)
-    libtcod.console_put_char(con, 0, 0, 201, libtcod.BKGND_NONE)
-    libtcod.console_put_char(con, w - 1, 0, 187, libtcod.BKGND_NONE)
-    libtcod.console_put_char(con, 0, h - 1, 200, libtcod.BKGND_NONE)
-    libtcod.console_put_char(con, w - 1, h - 1, 188, libtcod.BKGND_NONE)
+        libtcod.console_put_char(con, 0, y, 186, libtcod.BKGND_SET)
+        libtcod.console_put_char(con, w - 1, y, 186, libtcod.BKGND_SET)
+    libtcod.console_put_char(con, 0, 0, 201, libtcod.BKGND_SET)
+    libtcod.console_put_char(con, w - 1, 0, 187, libtcod.BKGND_SET)
+    libtcod.console_put_char(con, 0, h - 1, 200, libtcod.BKGND_SET)
+    libtcod.console_put_char(con, w - 1, h - 1, 188, libtcod.BKGND_SET)

@@ -121,8 +121,8 @@ class GameMap:
             self.tiles[x][y].block_sight = False
 
     def place_entities(self, room, entities):
-        max_npcs_per_room = from_dungeon_level([[6, 1], [2, 4]], self.dungeon_level)
-        max_monsters_per_room = from_dungeon_level([[8, 1], [3, 4], [5, 6]], self.dungeon_level)
+        max_npcs_per_room = from_dungeon_level([[1, 1], [2, 4]], self.dungeon_level)
+        max_monsters_per_room = from_dungeon_level([[2, 1], [3, 4], [5, 6]], self.dungeon_level)
         max_items_per_room = from_dungeon_level([[1, 1], [2, 4]], self.dungeon_level)
 
         # Get a random number of npcs
