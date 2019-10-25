@@ -78,7 +78,7 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
 
     libtcod.console_print_ex(con, 2, game_map.height - 1, libtcod.BKGND_SET, libtcod.LEFT, "Attack: a, s   Talk: f   Use stairs: entr   Get item: g   Drop Item: d ")
 
-    libtcod.console_print_ex(con, 2, 0, libtcod.BKGND_SET, libtcod.LEFT, "Inventory: i   Character: c   Fullscreen: +,   Exit: esc")
+    libtcod.console_print_ex(con, 2, 0, libtcod.BKGND_SET, libtcod.LEFT, "Inventory: r   Character: c   Fullscreen: +,   Exit: esc")
 
     #the code below is the begining of a bit of code to add information at the bottom edge of the con
     #libtcod.console_set_default_foreground(con, colors.get('map_border'))
