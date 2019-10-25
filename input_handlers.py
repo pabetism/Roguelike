@@ -60,7 +60,7 @@ def handle_player_turn_keys(key):
     elif key_char == 'f':
         return {'gab': True}
 
-    if key_char == '+':
+    if key_char == '=':
         # Alt+Enter: toggle full screen
         return {'fullscreen': True}
     elif key.vk == libtcod.KEY_ESCAPE:
