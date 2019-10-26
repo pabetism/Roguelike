@@ -24,7 +24,7 @@ def get_constants():
     window_title = 'Basic Roguelike'
 
     screen_width = 100
-    screen_height = 80
+    screen_height = 60
 
     bar_width = 20
     panel_height = 20
@@ -41,8 +41,8 @@ def get_constants():
     map_height = panel_y - 2
     map_x = hud_width + 2
 
-    room_max_size = min(40, map_height)
-    room_min_size = min(20, room_max_size-20)
+    room_max_size = min(20, map_height)
+    room_min_size = min(6, room_max_size-10)
     max_rooms = 20
 
     fov_algorithm = 0

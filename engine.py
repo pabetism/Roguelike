@@ -1,9 +1,9 @@
 import libtcodpy as libtcod
 
 import os
-import PyInstaller.__main__
 
 #Uncomment the follwoing lines to make a distributable executable: (more info at pyinstaller.readthedocs.io/en/stable/usage.html#running-pyinstaller-from-python-code)
+#import PyInstaller.__main__
 #PyInstaller.__main__.run([
 #     os.path.join('engine.py'),
 #])

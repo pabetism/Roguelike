@@ -37,7 +37,7 @@ def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_c
         libtcod.console_rect(panel, x, y, bar_width, 1, False, libtcod.BKGND_SET)
 
     libtcod.console_set_default_foreground(panel, font_color)
-    libtcod.console_print_ex(panel, int(x + total_width / 2), y, libtcod.BKGND_SET, libtcod.CENTER,
+    libtcod.console_print_ex(panel, int(x + total_width / 2), y, libtcod.BKGND_NONE, libtcod.CENTER,
                              '{0}: {1}/{2}'.format(name, value, maximum))
 
 
@@ -75,6 +75,11 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
     #gosh, i probably don't need to redraw the borders every time!
     draw_borders(con, game_map.height, game_map.width, colors.get('map_border'))
 
+
+    libtcod.console_print_ex(con, 2, game_map.height - 1, libtcod.BKGND_SET, libtcod.LEFT, "Attack: a, s   Talk: f   Use stairs: entr   Get item: g   Drop Item: d ")
+
+    libtcod.console_print_ex(con, 2, 0, libtcod.BKGND_SET, libtcod.LEFT, "Inventory: r   Character: c   Fullscreen: +,   Exit: esc")
+
     #the code below is the begining of a bit of code to add information at the bottom edge of the con
     #libtcod.console_set_default_foreground(con, colors.get('map_border'))
     #libtcod.console_set_default_background(con, libtcod.black)
@@ -84,7 +89,6 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
     #libtcod.console_put_char(con, 13, game_map.height - 1, 198, libtcod.BKGND_SET)
     #libtcod.console_print_ex(con, 3, game_map.height - 1, libtcod.BKGND_SET, libtcod.LEFT, get_names_under_mouse(mouse, entities, fov_map))
         
-
     entities_in_render_order = sorted(entities, key=lambda x: x.render_order.value)
 
     # Draw all entities in the list
@@ -92,7 +96,7 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
         draw_entity(con, entity, fov_map, game_map, colors)
 
     libtcod.console_blit(con, 0, 0, screen_width, screen_height, 0, map_x, 1)
-
+    
     libtcod.console_set_default_background(panel, libtcod.black)
     libtcod.console_clear(panel)
 
