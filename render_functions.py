@@ -16,11 +16,11 @@ class RenderOrder(Enum):
     ACTOR = 4
 
 
-def get_names_under_mouse(mouse, entities, fov_map):
-    (x, y) = (mouse.cx, mouse.cy)
+def get_names_under_mouse(mouse, entities, fov_map, map_x):
+    (x, y) = (mouse.cx - map_x, mouse.cy - 1)
 
     names = [entity.name for entity in entities
-             if entity.x == x and entity.y == y and libtcod.map_is_in_fov(fov_map, entity.x, entity.y)]
+            if entity.x == x and entity.y == y and libtcod.map_is_in_fov(fov_map, entity.x, entity.y)]
     names = ', '.join(names)
 
     return names.capitalize()
@@ -80,20 +80,16 @@ def render_all(con, hud, panel, entities, player, game_map, fov_map, fov_recompu
 
     libtcod.console_print_ex(con, 2, 0, libtcod.BKGND_SET, libtcod.LEFT, "Inventory: r   Character: c   Fullscreen: +,   Exit: esc")
 
-    #the code below is the begining of a bit of code to add information at the bottom edge of the con
-    #libtcod.console_set_default_foreground(con, colors.get('map_border'))
-    #libtcod.console_set_default_background(con, libtcod.black)
-
-    #libtcod.console_put_char(con, 2, game_map.height - 1, 181, libtcod.BKGND_SET)
-    #libtcod.console_print_ex(con, 3, game_map.height - 1, libtcod.BKGND_SET, libtcod.LEFT, '          ')
-    #libtcod.console_put_char(con, 13, game_map.height - 1, 198, libtcod.BKGND_SET)
-    #libtcod.console_print_ex(con, 3, game_map.height - 1, libtcod.BKGND_SET, libtcod.LEFT, get_names_under_mouse(mouse, entities, fov_map))
         
     entities_in_render_order = sorted(entities, key=lambda x: x.render_order.value)
 
     # Draw all entities in the list
     for entity in entities_in_render_order:
         draw_entity(con, entity, fov_map, game_map, colors)
+
+    libtcod.console_set_default_foreground(con, libtcod.grey)
+    libtcod.console_set_default_background(con, libtcod.black)
+    libtcod.console_print_ex(con, 3, game_map.height, libtcod.BKGND_SET, libtcod.LEFT, get_names_under_mouse(mouse, entities, fov_map, map_x))
 
     libtcod.console_blit(con, 0, 0, screen_width, screen_height, 0, map_x, 1)
     

@@ -122,8 +122,8 @@ class GameMap:
 
     def place_entities(self, room, entities):
         max_npcs_per_room = from_dungeon_level([[1, 1], [2, 4]], self.dungeon_level)
-        max_monsters_per_room = from_dungeon_level([[2, 1], [3, 4], [5, 6]], self.dungeon_level)
-        max_items_per_room = from_dungeon_level([[1, 1], [2, 4]], self.dungeon_level)
+        max_monsters_per_room = from_dungeon_level([[3, 1], [3, 4], [5, 6]], self.dungeon_level)
+        max_items_per_room = from_dungeon_level([[5, 1], [2, 4]], self.dungeon_level)
 
         # Get a random number of npcs
         number_of_npcs = randint(1, max_npcs_per_room)
@@ -149,7 +149,7 @@ class GameMap:
             'sword': from_dungeon_level([[5, 4]], self.dungeon_level),
             'shield': from_dungeon_level([[15, 8]], self.dungeon_level),
             'lightning_scroll': from_dungeon_level([[25, 4]], self.dungeon_level),
-            'fireball_scroll': from_dungeon_level([[25, 6]], self.dungeon_level),
+            'fireball_scroll': from_dungeon_level([[100,1],[25, 6]], self.dungeon_level),
             'confusion_scroll': from_dungeon_level([[10, 2]], self.dungeon_level)
         }
 
